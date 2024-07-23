@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - User Queries</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <h1>User Queries</h1>
+  <table id="queriesTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Mobile</th>
+        <th>Message</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% data.forEach(function(query) { %>
+      <tr>
+        <td><%= query.name %></td>
+        <td><%= query.email %></td>
+        <td><%= query.mobile %></td>
+        <td><%= query.message %></td>
+        <td>
+          <button onclick="deleteQuery('<%= query._id %>')">Delete</button>
+        </td>
+      </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+  <script>
+    function deleteQuery(id) {
+      if (confirm('Are you sure you want to delete this query?')) {
+        fetch(`/delete-query/${id}`, {
+          method: 'DELETE'
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            location.reload();
+          } else {
+            alert('Error deleting query');
+          }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
